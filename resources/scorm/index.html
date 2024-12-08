@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course_title }}</title>
+    <script src="API.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .content {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>{{ course_title }}</h1>
+        <p>{{ course_description }}</p>
+        <div id="learning-units">
+            <!-- Learning units will be dynamically injected -->
+        </div>
+    </div>
+    <script>
+        // Load and render course content dynamically
+        const learningUnits = {{ learning_units }};
+        const container = document.getElementById('learning-units');
+        learningUnits.forEach(unit => {
+            const unitDiv = document.createElement('div');
+            unitDiv.innerHTML = `<h2>${unit.title}</h2><p>${unit.description}</p>`;
+            container.appendChild(unitDiv);
+        });
+
+        // Initialize SCORM tracking
+        window.onload = function () {
+            if (typeof SCORM_API !== 'undefined') {
+                SCORM_API.initialize();
+            }
+        };
+
+        // End SCORM tracking when the user leaves
+        window.onbeforeunload = function () {
+            if (typeof SCORM_API !== 'undefined') {
+                SCORM_API.terminate();
+            }
+        };
+    </script>
+</body>
+</html>
